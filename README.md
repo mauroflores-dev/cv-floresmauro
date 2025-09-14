@@ -1,6 +1,3 @@
-Claro, aquí tienes una propuesta de README para el repositorio de GitHub de tu CV interactivo.
-
------
 
 # CV Interactivo - Mauro Ezequiel Flores
 
@@ -55,15 +52,15 @@ Si deseas clonar y explorar el proyecto en tu máquina local, solo sigue estos s
 1.  **Clona el repositorio:**
 
     ```sh
-    git clone https://github.com/Floree1/interactive-cv.git
+    git clone https://github.com/mauroflores-dev/cv-floresmauro.git
     ```
 
-    *(Nota: Reemplaza `interactive-cv.git` con el nombre real de tu repositorio si es diferente)*
+    *(Nota: Reemplaza `cv-floresmauro.git` con el nombre real de tu repositorio si es diferente)*
 
 2.  **Navega al directorio del proyecto:**
 
     ```sh
-    cd interactive-cv
+    cd cv-floresmauro
     ```
 
 3.  **Abre el archivo `index.html` en tu navegador:**
