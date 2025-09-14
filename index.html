@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Interactivo - Flores Mauro Ezequiel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Se mantiene la estructura narrativa y se mejora la UX. Se añade un formulario de contacto al final como CTA principal. Se implementan animaciones de scroll para guiar la atención y hacer la experiencia más fluida. Se agrega un botón "volver arriba" para mejorar la navegación en una página más extensa. Estas adiciones convierten el CV estático en una experiencia de usuario más completa y profesional. -->
+    <!-- Visualization & Content Choices: Perfil -> Informar -> Texto. Tecnologías -> Organizar/Informar -> Cuadrícula. Trayectoria -> Organizar/Cambio -> Línea de tiempo. Proyectos -> Demostrar -> Tarjetas. Aptitudes -> Comparar/Informar -> Gráfico Radar. Contacto -> Interactuar -> Formulario (HTML/JS con Fetch a Formspree) -> Facilita la comunicación directa y funcional. Animaciones -> Mejorar UX -> (JS/IntersectionObserver) -> Aumenta el engagement visual. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #2c3e50;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #f8f7f4;
+            border: 4px solid #3498db;
+            top: 20px;
+            left: -10px;
+            z-index: 1;
+        }
+        .details-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .details-content.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-800">Mauro E. Flores</h1>
+            <ul class="flex flex-wrap justify-end space-x-4 md:space-x-6 text-gray-600 font-medium text-sm md:text-base">
+                <li><a href="#perfil" class="hover:text-blue-500 transition-colors">Perfil</a></li>
+                <li><a href="#tecnologias" class="hover:text-blue-500 transition-colors">Tecnologías</a></li>
+                <li><a href="#proyectos" class="hover:text-blue-500 transition-colors">Proyectos</a></li>
+                <li><a href="#aptitudes" class="hover:text-blue-500 transition-colors">Aptitudes</a></li>
+                <li><a href="#contacto" class="hover:text-blue-500 transition-colors">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="hero" class="text-center py-16">
+            <!-- Imagen de perfil actualizada: ahora es circular, centrada y responsiva. -->
+            <img src="img/Foto_cv_web.jpeg" alt="Mauro Flores" class="mx-auto mb-6 w-48 h-48 rounded-full shadow-lg border-4 border-white">
+            <h2 class="text-5xl font-bold text-gray-900">Mauro Ezequiel Flores</h2>
+            <p class="text-xl text-gray-600 mt-4">Desarrollador de Software & Analista de Ciberseguridad</p>
+            <div class="mt-8 flex justify-center items-center space-x-6 text-gray-500 mb-10">
+                <span class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    mauroflores902@gmail.com
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Río Cuarto, Córdoba, Argentina
+                </span>
+            </div>
+            <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/Floree1" class="bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-900 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <button onclick="window.print()" class="bg-white text-gray-700 font-bold py-3 px-6 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Descargar CV
+                </button>
+            </div>
+        </section>
+
+        <section id="perfil" class="py-16 fade-in-section">
+            <div class="max-w-3xl mx-auto text-center">
+                <h3 class="text-3xl font-bold mb-4 text-gray-800">Perfil Profesional</h3>
+                <p class="text-lg text-gray-600 leading-relaxed">
+                    Desarrollador de software con experiencia en la creación de aplicaciones de forma independiente y un fuerte interés en el área de ciberseguridad. Busco aplicar mis habilidades técnicas y mi capacidad para la resolución de problemas en un entorno desafiante. Soy una persona proactiva, con gran adaptabilidad y excelentes habilidades para el trabajo en equipo y la comunicación.
+                </p>
+            </div>
+        </section>
+
+        <section id="tecnologias" class="py-16 bg-white rounded-lg fade-in-section">
+            <div class="max-w-5xl mx-auto text-center">
+                <h3 class="text-3xl font-bold mb-12 text-gray-800">Tecnologías y Herramientas</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                    <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow"><span class="text-4xl font-bold text-blue-500">JS</span><p class="mt-2 font-semibold">JavaScript</p></div>
+                    <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow"><span class="text-4xl font-bold text-orange-500">PY</span><p class="mt-2 font-semibold">Python</p></div>
+                    <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow"><span class="text-4xl font-bold text-cyan-500">W</span><p class="mt-2 font-semibold">Word</p></div>
+                    <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow"><span class="text-4xl font-bold text-red-500">SQL</span><p class="mt-2 font-semibold">SQL</p></div>
+                    <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:shadow-md transition-shadow"><span class="text-4xl font-bold text-green-500">EX</span><p class="mt-2 font-semibold">Excel</p></div>
+                </div>
+                 <p class="text-sm text-gray-500 mt-8">...entre otras. ¡Pregúntame para más detalles!</p>
+            </div>
+        </section>
+
+        <section id="trayectoria" class="py-16 fade-in-section">
+            <h3 class="text-3xl font-bold mb-12 text-center text-gray-800">Trayectoria Profesional y Académica</h3>
+            <div class="relative max-w-4xl mx-auto">
+                <div class="absolute left-0 md:left-1/2 w-1 h-full bg-gray-300"></div>
+                <div id="timeline-container" class="space-y-12"></div>
+            </div>
+        </section>
+
+        <section id="proyectos" class="py-16 bg-white rounded-lg fade-in-section">
+            <div class="max-w-5xl mx-auto">
+                <h3 class="text-3xl font-bold mb-12 text-center text-gray-800">Proyectos Destacados</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold text-gray-800">AppControlStock</h4>
+                            <p class="mt-2 text-gray-600">Aplicación de escritorio multifuncional diseñada para centralizar las operaciones clave de un negocio. Ofrece control de stock, gestión de clientes, ventas POS y análisis de rendimiento.</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Python</span>
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">SQLite</span>
+                            </div>
+                            <div class="mt-6 flex gap-4 font-semibold">
+                                <a href="https://github.com/Floree1/AppControlStock-V2.5" class="text-blue-600 hover:underline">Ver Código</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 transition-transform duration-300">
+                        <div class="p-6">
+                            <h4 class="text-xl font-bold text-gray-800">Login Screen</h4>
+                            <p class="mt-2 text-gray-600">Pantalla de inicio de sesión con diseño moderno, con pestaña de logeo y un footer sencillo y adaptable.</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">CSS/JS</span>
+                            </div>
+                             <div class="mt-6 flex gap-4 font-semibold">
+                                <a href="https://github.com/Floree1/login_screen" class="text-gray-800 hover:underline">Ver Código</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="aptitudes" class="py-16 fade-in-section">
+            <h3 class="text-3xl font-bold mb-12 text-center text-gray-800">Aptitudes Clave</h3>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">
+                Mis habilidades interpersonales me permiten adaptarme y contribuir eficazmente en cualquier equipo.
+            </p>
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </section>
+
+        <section id="contacto" class="py-16 bg-white rounded-lg fade-in-section">
+            <div class="max-w-3xl mx-auto text-center">
+                <h3 class="text-3xl font-bold mb-4 text-gray-800">¡Hablemos!</h3>
+                <p class="text-lg text-gray-600 mb-8">¿Interesado en mi perfil? Envíame un mensaje y me pondré en contacto a la brevedad.</p>
+                <!--
+                    PASO IMPORTANTE PARA ACTIVAR EL FORMULARIO:
+                    1. Ve a https://formspree.io/ y crea una cuenta gratuita.
+                    2. Crea un nuevo formulario ("New Form").
+                    3. Formspree te dará una URL única, algo como "https://formspree.io/f/xxxxxxxx".
+                    4. Reemplaza la URL en el atributo 'action' de abajo con la tuya.
+                    ¡Y listo! Tu formulario estará activo.
+                -->
+                <form id="contact-form" action="https://formspree.io/f/xqadjdaw" method="POST" class="text-left space-y-6">
+                    <div>
+                        <label for="name" class="font-medium text-gray-700">Nombre</label>
+                        <input type="text" id="name" name="name" required class="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="email" class="font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" name="email" required class="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="message" class="font-medium text-gray-700">Mensaje</label>
+                        <textarea id="message" name="message" rows="5" required class="mt-2 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center w-full sm:w-auto">Enviar Mensaje</button>
+                    </div>
+                </form>
+                <div id="form-feedback" class="mt-6 text-lg"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center py-6">
+        <p>&copy; 2025 Mauro Ezequiel Flores. Todos los derechos reservados.</p>
+        <p class="mt-2 text-gray-400">mauroflores902@gmail.com</p>
+    </footer>
+
+    <button id="back-to-top" class="bg-blue-600 text-white rounded-full p-3 shadow-lg hover:bg-blue-700 transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const timelineData = [
+                { type: 'Educación', title: 'Certificado en Cibercrimen y Ciberseguridad', institution: 'Universidad Siglo 21', date: '2025 - Cursando', description: 'Actualmente cursando para obtener la certificación de experto en investigación en cibercrimen y ciberseguridad, adquiriendo conocimientos avanzados en la protección y análisis de sistemas digitales.' },
+                { type: 'Experiencia', title: 'Auxiliar de Depósito', institution: 'Eikon', date: '2023 - 2024', description: 'Control de stock, armado de computadoras e instalación de sistemas para su posterior despacho.' },
+                { type: 'Educación', title: 'Tecnicatura en Desarrollo de Software', institution: 'ITEC', date: '2019 - Pausada', description: 'Formación técnica superior en desarrollo de software, a solo un año de finalizar.' },
+                { type: 'Experiencia', title: 'Desarrollo de Aplicaciones Independiente', institution: 'Autónomo', date: '2016 - Actualidad', description: 'Realización de trabajos freelance de programación y gestión de un pequeño equipo de desarrollo.' },
+                { type: 'Educación', title: 'Secundario Completo', institution: 'Colegio San Juan de la Cruz', date: '2011 - 2017', description: 'Finalización de los estudios secundarios.' }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineData.forEach((item, index) => {
+                const alignmentClass = index % 2 === 0 ? 'md:ml-auto md:pl-16' : 'md:mr-auto md:pr-16 md:text-right';
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `relative w-full md:w-1/2 p-4 rounded-lg bg-white shadow-lg cursor-pointer timeline-item-trigger ${alignmentClass}`;
+                const typeColor = item.type === 'Experiencia' ? 'text-blue-500' : 'text-green-500';
+                timelineItem.innerHTML = `
+                    <div class="flex flex-col md:flex-row ${index % 2 !== 0 ? 'md:flex-row-reverse' : ''} md:items-center justify-between">
+                         <div class="text-left">
+                            <span class="font-bold text-sm uppercase ${typeColor}">${item.type}</span>
+                            <h4 class="text-xl font-bold mt-1">${item.title}</h4>
+                            <p class="text-gray-500">${item.institution}</p>
+                            <p class="text-sm font-medium text-gray-400 mt-1">${item.date}</p>
+                        </div>
+                        <div class="mt-2 md:mt-0">
+                            <svg class="w-6 h-6 text-gray-400 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="details-content mt-4 text-left">
+                        <p class="text-gray-600">${item.description}</p>
+                    </div>`;
+                timelineContainer.appendChild(timelineItem);
+            });
+
+            document.querySelectorAll('.timeline-item-trigger').forEach(item => {
+                item.addEventListener('click', () => {
+                    const content = item.querySelector('.details-content');
+                    const icon = item.querySelector('svg');
+                    content.classList.toggle('open');
+                    icon.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+                });
+            });
+
+            const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(skillsCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Trabajo en equipo', 'Resolución de problemas', 'Comunicación', 'Adaptación rápida', 'Empatía'],
+                    datasets: [{
+                        label: 'Habilidades Interpersonales',
+                        data: [90, 95, 85, 90, 80],
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: true, max: 100, angleLines: { color: 'rgba(0, 0, 0, 0.1)' }, grid: { color: 'rgba(0, 0, 0, 0.1)' }, pointLabels: { font: { size: 14, weight: '500' }, color: '#34495e' }, ticks: { display: false, stepSize: 20 } } },
+                    plugins: { legend: { display: false }, tooltip: { enabled: true, callbacks: { label: (context) => ` ${context.label}: ${context.raw}` } } }
+                }
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            const animatedSections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            animatedSections.forEach(section => observer.observe(section));
+
+            const backToTopButton = document.getElementById('back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('show');
+                } else {
+                    backToTopButton.classList.remove('show');
+                }
+            });
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            const contactForm = document.getElementById('contact-form');
+            const formFeedback = document.getElementById('form-feedback');
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+
+            contactForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const data = new FormData(form);
+                const originalButtonText = submitButton.innerHTML;
+
+                submitButton.disabled = true;
+                submitButton.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Enviando...`;
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: data,
+                        headers: { 'Accept': 'application/json' }
+                    });
+
+                    if (response.ok) {
+                        formFeedback.textContent = '¡Gracias! Tu mensaje ha sido enviado correctamente.';
+                        formFeedback.className = 'mt-6 text-lg text-green-600 font-semibold';
+                        form.reset();
+                    } else {
+                        formFeedback.textContent = 'Hubo un error al enviar el mensaje. Inténtalo de nuevo.';
+                        formFeedback.className = 'mt-6 text-lg text-red-600 font-semibold';
+                    }
+                } catch (error) {
+                    formFeedback.textContent = 'Error de red. Revisa tu conexión e inténtalo de nuevo.';
+                    formFeedback.className = 'mt-6 text-lg text-red-600 font-semibold';
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalButtonText;
+                    setTimeout(() => { formFeedback.textContent = ''; }, 6000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
